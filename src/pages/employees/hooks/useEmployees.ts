@@ -2,12 +2,20 @@ import { ref, computed, onMounted } from 'vue'
 import router from '@/app/router'
 import { fetchData } from '@/api'
 
-export const useEmployees = () => {
+type Employee = {
+    id: number
+    name: string
+    department: string
+    // другие поля...
+}
+
+export const useEmployees = (initialSearchQuery = ref('')) => {
     const isLoading = ref(false)
     const error = ref<string | null>(null)
-    const employeeList = ref([])
-    const selectedDepartment = ref('All')
-    const receivedData = ref(null)
+    const employeeList = ref<Employee[]>([])
+    const selectedDepartment = ref<string>('All')
+    const receivedData = ref<Employee[] | null>(null)
+    const searchQuery = initialSearchQuery
 
     const loadedEmployeeData = async () => {
         isLoading.value = true
@@ -28,24 +36,22 @@ export const useEmployees = () => {
         router.push({ path: `/${id}` })
     }
 
-    const finalList = computed(() => {
-        if (!employeeList.value.length) return []
-        if (receivedData.value?.length) {
-            return receivedData.value
-        }
-        return filteredEmployees(employeeList.value, selectedDepartment.value)
+    const filteredByDepartment = computed(() => {
+        const list = receivedData.value ?? employeeList.value
+        if (!list.length) return []
+
+        const department = selectedDepartment.value
+        return department === 'All' ? list : list.filter((emp) => emp.department === department)
     })
 
-    const filteredEmployees = (list: Array<{ department: string }>, department: string) => {
-        if (!list.length) return []
-        if (department === 'All') return list
-        return list.filter((emp) => emp.department === department)
-    }
+    const searchEmployees = computed(() => {
+        const list = filteredByDepartment.value
+        const query = searchQuery.value.toLowerCase()
 
-    const updateResults = (data: any) => {
-        console.log(receivedData.value, data)
-        receivedData.value = data
-    }
+        return query ? list.filter((employee) => employee.name.toLowerCase().includes(query)) : list
+    })
+
+    const finalList = computed(() => searchEmployees.value)
 
     onMounted(loadedEmployeeData)
 
@@ -58,7 +64,7 @@ export const useEmployees = () => {
         receivedData,
         loadedEmployeeData,
         goTo,
-        updateResults,
-        filteredEmployees,
+        filteredByDepartment,
+        searchQuery,
     }
 }

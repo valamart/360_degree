@@ -2,11 +2,7 @@
     <div>
         <h2>employerlist</h2>
         <DepartmentFilterPage v-model="selectedDepartment" />
-        <EmployeeSearchPage
-            v-if="employeeList.length"
-            :employees="filteredEmployees(employeeList, selectedDepartment)"
-            @filtered-results="updateResults"
-        />
+        <EmployeeSearchPage v-model="searchQuery" />
         <EmployeeListPage class="list">
             <EmployeeCard
                 v-for="item of finalList"
@@ -26,18 +22,9 @@
     import { EmployeeListPage } from '@/pages/employees/employeesPages/employeeListPage/index'
     import { EmployeeSearchPage } from '../employeesPages/EmployeeSearchPage'
 
-    const {
-        isLoading,
-        error,
-        finalList,
-        employeeList,
-        selectedDepartment,
-        receivedData,
-        loadedEmployeeData,
-        goTo,
-        updateResults,
-        filteredEmployees,
-    } = useEmployees()
+    const searchQuery = ref('')
+
+    const { isLoading, error, finalList, selectedDepartment, goTo } = useEmployees(searchQuery)
 </script>
 
 <style>
