@@ -23,6 +23,9 @@
         border-radius: 8px;
         margin: 10px;
         box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     .card img {
         width: 100px;

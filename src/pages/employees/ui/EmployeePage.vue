@@ -4,7 +4,7 @@
         <DepartmentFilterPage v-model="selectedDepartment" />
         <EmployeeSearchPage v-model="searchQuery" />
         <EmployeeListPage class="list">
-            <EmployeeCard
+            <EmployeeCardPage
                 v-for="item of finalList"
                 :key="item.id"
                 :employee="item"
@@ -18,9 +18,10 @@
     import { onMounted, ref, watch, computed } from 'vue'
     import { useEmployees } from '../hooks/useEmployees'
     import { DepartmentFilterPage } from '@/pages/employees/employeesPages/departmentFilterPage'
-    import EmployeeCard from '@/components/EmployeeCard.vue'
+    // import EmployeeCard from '@/components/EmployeeCard.vue'
     import { EmployeeListPage } from '@/pages/employees/employeesPages/employeeListPage/index'
     import { EmployeeSearchPage } from '../employeesPages/EmployeeSearchPage'
+    import { EmployeeCardPage } from '@/pages/employees/employeesPages/employeeCardPage/index.ts'
 
     const searchQuery = ref('')
 
@@ -28,5 +29,8 @@
 </script>
 
 <style>
-    @import './styles.css';
+    .list {
+        display: flex;
+        flex-wrap: wrap;
+    }
 </style>
