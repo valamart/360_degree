@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { EmployeePage } from '@/pages/employees/index'
-import { EmployeeCard } from '@/pages/employeeCard/index.ts'
+import { EmployeePage } from '@/pages/employees'
+import { EmployeeCard } from '@/pages/employeeCard'
 
 const routes = [
     {

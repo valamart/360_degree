@@ -20,9 +20,8 @@ export const useEmployees = (initialSearchQuery = ref('')) => {
     const loadedEmployeeData = async () => {
         isLoading.value = true
         error.value = null
-        let data
         try {
-            data = await fetchData()
+            const data = await fetchData()
             employeeList.value = data.employeeList || []
         } catch (err) {
             error.value = 'Failed to fetch employees'
@@ -32,40 +31,40 @@ export const useEmployees = (initialSearchQuery = ref('')) => {
         }
     }
 
-    const goTo = (id) => {
-        const employee = employeeList.value.find((employee) => employee.id === +id)
-        router.push({ path: `/${id}`, query: { employee: JSON.stringify(employee) } })
+    const goTo = (id: number) => {
+        const employee = employeeList.value.find((e) => e.id === +id)
+        if (employee) {
+            router.push({
+                path: `/${id}`,
+                query: { employee: JSON.stringify(employee) },
+            })
+        }
     }
 
-    const filteredByDepartment = computed(() => {
+    const filteredEmployees = computed(() => {
         const list = receivedData.value ?? employeeList.value
         if (!list.length) return []
 
-        const department = selectedDepartment.value
-        return department === 'All' ? list : list.filter((emp) => emp.department === department)
-    })
-
-    const searchEmployees = computed(() => {
-        const list = filteredByDepartment.value
         const query = searchQuery.value.toLowerCase()
+        const department = selectedDepartment.value
 
-        return query ? list.filter((employee) => employee.name.toLowerCase().includes(query)) : list
+        return list.filter((employee) => {
+            const departmentMatch = department === 'All' || employee.department === department
+            const nameMatch = !query || employee.name.toLowerCase().includes(query)
+            return departmentMatch && nameMatch
+        })
     })
-
-    const finalList = computed(() => searchEmployees.value)
 
     onMounted(loadedEmployeeData)
 
     return {
         isLoading,
         error,
-        finalList,
-        employeeList,
+        filteredEmployees,
         selectedDepartment,
         receivedData,
         loadedEmployeeData,
         goTo,
-        filteredByDepartment,
         searchQuery,
     }
 }

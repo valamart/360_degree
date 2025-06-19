@@ -1,31 +1,25 @@
 <template>
     <div>
         <h2>employerlist</h2>
-        <DepartmentFilterPage v-model="selectedDepartment" />
-        <EmployeeSearchPage v-model="searchQuery" />
-        <EmployeeListPage class="list">
-            <EmployeeCardPage
-                v-for="item of finalList"
-                :key="item.id"
-                :employee="item"
-                @click="goTo(item.id)"
-            />
-        </EmployeeListPage>
+
+        <FilterComponent
+            v-model:searchValue="searchQuery"
+            v-model:departmentValue="selectedDepartment"
+        />
+        <list :filteredEmployees="filteredEmployees" />
     </div>
 </template>
 
 <script setup>
     import { onMounted, ref, watch, computed } from 'vue'
-    import { useEmployees } from '../hooks/useEmployees'
-    import { DepartmentFilterPage } from '@/pages/employees/employeesPages/departmentFilterPage'
-    // import EmployeeCard from '@/components/EmployeeCard.vue'
-    import { EmployeeListPage } from '@/pages/employees/employeesPages/employeeListPage/index'
-    import { EmployeeSearchPage } from '../employeesPages/EmployeeSearchPage'
-    import { EmployeeCardPage } from '@/pages/employees/employeesPages/employeeCardPage/index.ts'
+    import { useEmployees } from '../model/useEmployees'
 
+    import list from '@/pages/employees/ui/list.vue'
+    import FilterComponent from '@/pages/employees/ui/FilterComponent.vue'
     const searchQuery = ref('')
 
-    const { isLoading, error, finalList, selectedDepartment, goTo } = useEmployees(searchQuery)
+    const { isLoading, error, filteredEmployees, selectedDepartment, goTo } =
+        useEmployees(searchQuery)
 </script>
 
 <style>
