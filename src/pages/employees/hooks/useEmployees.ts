@@ -33,7 +33,8 @@ export const useEmployees = (initialSearchQuery = ref('')) => {
     }
 
     const goTo = (id) => {
-        router.push({ path: `/${id}` })
+        const employee = employeeList.value.find((employee) => employee.id === +id)
+        router.push({ path: `/${id}`, query: { employee: JSON.stringify(employee) } })
     }
 
     const filteredByDepartment = computed(() => {
