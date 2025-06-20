@@ -6,7 +6,10 @@
             v-model:searchValue="searchQuery"
             v-model:departmentValue="selectedDepartment"
         />
-        <list :filteredEmployees="filteredEmployees" />
+        <list
+            :filteredEmployees="filteredEmployees"
+            @go-to="goTo"
+        />
     </div>
 </template>
 

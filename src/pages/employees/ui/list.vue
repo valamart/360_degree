@@ -3,7 +3,7 @@
         v-for="item of filteredEmployees"
         :key="item.id"
         :employee="item"
-        @click="goTo(item.id)"
+        @click="$emit('goTo', item.id)"
     />
 </template>
 
