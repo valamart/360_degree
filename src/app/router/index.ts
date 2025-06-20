@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { EmployeePage } from '@/pages/employees/index'
-import EmployeePageCard from '@/components/employeePage/EmployeePageCard.vue'
+import { EmployeePage } from '@/pages/employees'
+import { EmployeeCard } from '@/pages/employeeCard'
 
 const routes = [
     {
@@ -9,7 +9,7 @@ const routes = [
     },
     {
         path: '/:id',
-        component: EmployeePageCard,
+        component: EmployeeCard,
         props: true,
     },
 ]

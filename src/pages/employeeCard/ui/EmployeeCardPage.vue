@@ -13,13 +13,12 @@
 </template>
 
 <script setup>
-    import { useEmployeeData } from '@/app/stores/employeeStore.ts'
-    import RatingModal from '../RatingModal.vue'
+    import RatingModal from '@/components/RatingModal.vue'
+    import { useRoute } from 'vue-router'
+    import { onMounted } from 'vue'
 
-    const { id } = defineProps(['id'])
-    const data = useEmployeeData()
-    const employee = data.data.find((employee) => employee.id === +id)
-    console.log(employee, id)
+    const route = useRoute()
+    const employee = JSON.parse(route.query.employee)
 </script>
 
 <style></style>
