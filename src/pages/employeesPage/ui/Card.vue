@@ -8,6 +8,7 @@
 
         <p>{{ employee.position }}</p>
         <p>{{ employee.department }}</p>
+        <slot></slot>
     </div>
 </template>
 

@@ -8,6 +8,6 @@
 </template>
 
 <script setup>
-    import Card from '@/pages/employees/ui/Card.vue'
+    import Card from '@/pages/employeesPage/ui/Card.vue'
     const { filteredEmployees } = defineProps(['filteredEmployees'])
 </script>

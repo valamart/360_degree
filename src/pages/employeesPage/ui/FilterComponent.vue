@@ -1,5 +1,5 @@
 <script setup>
-    import { defineProps, defineEmits } from 'vue'
+    import { defineProps, defineEmits, computed } from 'vue'
 
     const departments = [
         { department: 'IT' },
@@ -21,14 +21,15 @@
 
     const emit = defineEmits(['update:searchValue', 'update:departmentValue'])
 
-    const handleSearchInput = (event) => {
-        emit('update:searchValue', event.target.value)
-    }
+    const searchModel = computed({
+        get: () => props.searchValue,
+        set: (value) => emit('update:searchValue', value),
+    })
 
-    const handleDepartmentChange = (event) => {
-        console.log(event.target.value)
-        emit('update:departmentValue', event.target.value)
-    }
+    const departmentModel = computed({
+        get: () => props.departmentValue,
+        set: (value) => emit('update:departmentValue', value),
+    })
 </script>
 
 <template>
@@ -37,8 +38,7 @@
         <div class="filter-group">
             <input
                 type="text"
-                :value="searchValue"
-                @input="handleSearchInput"
+                v-model="searchModel"
                 placeholder="Search employees by name..."
                 class="search-input"
             />
@@ -47,8 +47,7 @@
         <!-- Department select -->
         <div class="filter-group">
             <select
-                :value="departmentValue"
-                @change="handleDepartmentChange"
+                v-model="departmentModel"
                 class="department-select"
             >
                 <option value="All">Все отделы</option>

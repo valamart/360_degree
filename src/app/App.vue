@@ -6,7 +6,9 @@
     <div class="employees-container">
         <router-view v-slot="{ Component }">
             <h1>main view</h1>
-            <div class="nav-bar">navigation <router-link to="/list">to main page</router-link></div>
+            <div class="nav-bar">
+                navigation <router-link to="/employee">to main page</router-link>
+            </div>
             <transition
                 name="fade"
                 mode="out-in"

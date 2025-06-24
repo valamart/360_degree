@@ -9,13 +9,13 @@ type Employee = {
     // другие поля...
 }
 
-export const useEmployees = (initialSearchQuery = ref('')) => {
+export const useEmployees = () => {
     const isLoading = ref(false)
     const error = ref<string | null>(null)
     const employeeList = ref<Employee[]>([])
     const selectedDepartment = ref<string>('All')
     const receivedData = ref<Employee[] | null>(null)
-    const searchQuery = initialSearchQuery
+    const searchTerm = ref('')
 
     const loadedEmployeeData = async () => {
         isLoading.value = true
@@ -45,7 +45,7 @@ export const useEmployees = (initialSearchQuery = ref('')) => {
         const list = receivedData.value ?? employeeList.value
         if (!list.length) return []
 
-        const query = searchQuery.value.toLowerCase()
+        const query = searchTerm.value.toLowerCase()
         const department = selectedDepartment.value
 
         return list.filter((employee) => {
@@ -55,8 +55,6 @@ export const useEmployees = (initialSearchQuery = ref('')) => {
         })
     })
 
-    onMounted(loadedEmployeeData)
-
     return {
         isLoading,
         error,
@@ -65,6 +63,6 @@ export const useEmployees = (initialSearchQuery = ref('')) => {
         receivedData,
         loadedEmployeeData,
         goTo,
-        searchQuery,
+        searchTerm,
     }
 }
