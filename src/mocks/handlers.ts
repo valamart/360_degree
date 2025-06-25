@@ -11,4 +11,19 @@ export const handlers = [
             headers: { 'Content-Type': 'application/json' },
         })
     }),
+    http.get('src/mocks/employeeMocks/:id', ({ params }) => {
+        const { id } = params
+        const employee = employeeList.find((emp) => emp.id === Number(id))
+
+        if (!employee) {
+            return new Response(JSON.stringify({ error: 'Employee not found' }), {
+                status: 404,
+                headers: { 'Content-Type': 'application/json' },
+            })
+        }
+
+        return new Response(JSON.stringify(employee), {
+            headers: { 'Content-Type': 'application/json' },
+        })
+    }),
 ]

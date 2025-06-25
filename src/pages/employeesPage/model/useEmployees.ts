@@ -1,5 +1,4 @@
-import { ref, computed, onMounted } from 'vue'
-import router from '@/app/router'
+import { ref, computed } from 'vue'
 import { fetchData } from '@/api'
 
 type Employee = {
@@ -31,16 +30,6 @@ export const useEmployees = () => {
         }
     }
 
-    const goTo = (id: number) => {
-        const employee = employeeList.value.find((e) => e.id === +id)
-        if (employee) {
-            router.push({
-                path: `/${id}`,
-                query: { employee: JSON.stringify(employee) },
-            })
-        }
-    }
-
     const filteredEmployees = computed(() => {
         const list = receivedData.value ?? employeeList.value
         if (!list.length) return []
@@ -62,7 +51,6 @@ export const useEmployees = () => {
         selectedDepartment,
         receivedData,
         loadedEmployeeData,
-        goTo,
         searchTerm,
     }
 }

@@ -19,7 +19,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
     import { onMounted, ref, watch, computed } from 'vue'
     import { useEmployees } from '../model/useEmployees'
     import Card from '@/pages/employeesPage/ui/Card.vue'
