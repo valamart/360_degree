@@ -1,5 +1,4 @@
-import { ref, computed, onMounted } from 'vue'
-import router from '@/app/router'
+import { ref, computed } from 'vue'
 import { fetchData } from '@/api'
 
 type Employee = {
@@ -9,20 +8,19 @@ type Employee = {
     // другие поля...
 }
 
-export const useEmployees = (initialSearchQuery = ref('')) => {
+export const useEmployees = () => {
     const isLoading = ref(false)
     const error = ref<string | null>(null)
     const employeeList = ref<Employee[]>([])
     const selectedDepartment = ref<string>('All')
     const receivedData = ref<Employee[] | null>(null)
-    const searchQuery = initialSearchQuery
+    const searchTerm = ref('')
 
     const loadedEmployeeData = async () => {
         isLoading.value = true
         error.value = null
-        let data
         try {
-            data = await fetchData()
+            const data = await fetchData()
             employeeList.value = data.employeeList || []
         } catch (err) {
             error.value = 'Failed to fetch employees'
@@ -32,39 +30,27 @@ export const useEmployees = (initialSearchQuery = ref('')) => {
         }
     }
 
-    const goTo = (id) => {
-        router.push({ path: `/${id}` })
-    }
-
-    const filteredByDepartment = computed(() => {
+    const filteredEmployees = computed(() => {
         const list = receivedData.value ?? employeeList.value
         if (!list.length) return []
 
+        const query = searchTerm.value.toLowerCase()
         const department = selectedDepartment.value
-        return department === 'All' ? list : list.filter((emp) => emp.department === department)
+
+        return list.filter((employee) => {
+            const departmentMatch = department === 'All' || employee.department === department
+            const nameMatch = !query || employee.name.toLowerCase().includes(query)
+            return departmentMatch && nameMatch
+        })
     })
-
-    const searchEmployees = computed(() => {
-        const list = filteredByDepartment.value
-        const query = searchQuery.value.toLowerCase()
-
-        return query ? list.filter((employee) => employee.name.toLowerCase().includes(query)) : list
-    })
-
-    const finalList = computed(() => searchEmployees.value)
-
-    onMounted(loadedEmployeeData)
 
     return {
         isLoading,
         error,
-        finalList,
-        employeeList,
+        filteredEmployees,
         selectedDepartment,
         receivedData,
         loadedEmployeeData,
-        goTo,
-        filteredByDepartment,
-        searchQuery,
+        searchTerm,
     }
 }
